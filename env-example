@@ -1,0 +1,14 @@
+#nextauth
+NEXT_PUBLIC_NEXTAUTH_URL=http://10.252.22.227:1000 
+#ganti ip production docker
+NEXT_PUBLIC_NEXTAUTH_SECRET=Dodikitn123!
+NEXTAUTH_URL=http://10.252.22.227:1000 
+#ganti ip production docker
+
+NEXT_PUBLIC_PORT=3001
+#api
+NEXT_PUBLIC_BASE_URL=http://localhost:3001
+NEXT_PUBLIC_BASE_URL_SERVER=http://10.252.22.227:1000 
+#ganti ip production docker
+NEXT_PUBLIC_API_BASE_URL=http://10.252.22.227:1000/api 
+#gmap
