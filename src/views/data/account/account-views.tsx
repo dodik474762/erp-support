@@ -271,7 +271,7 @@ const AccountViews = ({ base_url = "", akses = "" }) => {
                 },
               ]}
               value={["id", "account_name", "account_code", "account_type"]}
-              limit={25}
+              limit={2}
             />
           </div>
         </div>

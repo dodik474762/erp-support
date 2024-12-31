@@ -24,7 +24,7 @@ const GridList = (props: any) => {
   } = props;
   const router = useRouter();
   const [state, dispatch] = useReducer(gridReducer, initialState);
-  const { data, loading, currentPage, totalPages, totalRecords } = state;
+  const { data, loading, currentPage, totalPages, totalRecords, totalData} = state;
 
   // Fetch data from server with pagination
   const fetchData = async (page: number) => {
@@ -51,6 +51,8 @@ const GridList = (props: any) => {
       const totalPage = Math.ceil(result.total_page / limit);
       dispatch({ type: actionTypes.SET_DATA, payload: { data: result.data } });
       dispatch({ type: actionTypes.SET_TOTAL_PAGES, payload: totalPage });
+      dispatch({type: actionTypes.SET_TOTAL_DATA, payload: result.total_page});
+      dispatch({type: actionTypes.SET_TOTAL_RECORDS, payload: result.data.length });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -156,27 +158,41 @@ const GridList = (props: any) => {
               },
             }}
           />
-          <div
-            style={{ marginTop: "20px", padding: "10px", textAlign: "right" }}
-          >
-            {/* Pagination controls with page numbers */}
-            <button
-              disabled={currentPage === 0}
-              onClick={() => handlePageChange(currentPage - 1)}
-              style={{ padding: "5px 10px", marginRight: "10px" }}
-              className="btn btn-primary btn-sm"
-            >
-              Previous
-            </button>
-            {renderPageNumbers()} {/* Render the numbered pagination buttons */}
-            <button
-              disabled={currentPage + 1 === totalPages}
-              onClick={() => handlePageChange(currentPage + 1)}
-              style={{ padding: "5px 10px", marginLeft: "10px" }}
-              className="btn btn-primary btn-sm"
-            >
-              Next
-            </button>
+          <div className="row">
+            <div className="col-md-4">
+              <div className="dataTables_info" id="DataTables_Table_0_info">
+                Showing {totalRecords < totalData ? totalRecords : totalData} of {totalData} entries
+              </div>
+            </div>
+            <div className="col-md-8 text-end">
+              <div
+                style={{
+                  marginTop: "20px",
+                  padding: "10px",
+                  textAlign: "right",
+                }}
+              >
+                {/* Pagination controls with page numbers */}
+                <button
+                  disabled={currentPage === 0}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  style={{ padding: "5px 10px", marginRight: "10px" }}
+                  className="btn btn-primary btn-sm"
+                >
+                  Previous
+                </button>
+                {renderPageNumbers()}{" "}
+                {/* Render the numbered pagination buttons */}
+                <button
+                  disabled={currentPage + 1 === totalPages}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  style={{ padding: "5px 10px", marginLeft: "10px" }}
+                  className="btn btn-primary btn-sm"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
           </div>
         </>
       ) : (
