@@ -169,30 +169,6 @@ const RoutingViews = ({ base_url = "", akses = "" }) => {
                     return _(
                       <>
                         <ul className="list-inline hstack gap-2 mb-0">
-                          <li
-                            className="list-inline-item"
-                            data-bs-toggle="tooltip"
-                            data-bs-trigger="hover"
-                            data-bs-placement="top"
-                            title=""
-                            data-bs-original-title="View"
-                          >
-                            <Link
-                              href={
-                                base_url + "/details?id=" + row.cells[0].data
-                              }
-                              onClick={(e) =>
-                                handleRouting(
-                                  e,
-                                  base_url + "/details?id=" + row.cells[0].data,
-                                  router
-                                )
-                              }
-                              className="text-primary d-inline-block"
-                            >
-                              <i className="ri-eye-fill fs-16"></i>
-                            </Link>
-                          </li>
                           {akses.includes("update") ? (
                             <li
                               className="list-inline-item edit"
