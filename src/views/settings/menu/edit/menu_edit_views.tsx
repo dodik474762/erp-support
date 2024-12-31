@@ -20,6 +20,7 @@ const MenuEditViews = ({
   const [icon, setIcon] = useState(``);
   const [errors, setErrors]: any = useState({});
   const [loading, setLoading] = useState(false);
+  const [routing, setRouting] = useState(false);
   const [dataParent, setDataParent] = useState([]);
   const [parent, setParent] = useState({ value: "", label: "" });
 
@@ -37,6 +38,7 @@ const MenuEditViews = ({
       setName(res.data.name);
       setPath(res.data.path);
       setIcon(res.data.icon);
+      setRouting(res.data.routing == 1 ? true : false);
       setParent({
         value: res.data.parent_code == null ? "" : res.data.parent_code,
         label: res.data.parent_name == null ? "" : res.data.parent_name,
@@ -218,6 +220,27 @@ const MenuEditViews = ({
                   <div className="invalid-feedback">
                     Please Enter a icon menu
                   </div>
+                </div>
+                <div className="mb-3">
+                  {routing == true ? (
+                    <input
+                      type="checkbox"
+                      className=""
+                      id="product-title-input"
+                      checked
+                      onChange={(e: any) => setRouting(e.target.checked)}
+                    />
+                  ) : (
+                    <input
+                      type="checkbox"
+                      className=""
+                      id="product-title-input"
+                      onChange={(e: any) => setRouting(e.target.checked)}
+                    />
+                  )}{" "}
+                  <label className="form-label" htmlFor="product-title-input">
+                    Routing
+                  </label>
                 </div>
               </div>
             </div>

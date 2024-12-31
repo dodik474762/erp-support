@@ -5,17 +5,13 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Flatpickr from "react-flatpickr";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
-import { checkPermission } from "@/utility/permission";
-import moment from "moment-timezone";
-import { handleDeleteData } from "@/services/services";
-import { handleRouting } from "@/utility/routing-helper";
-import { RowSelection } from "gridjs-selection";
 import GridSearch from "@/components/List/Grid/grid-search";
+import { RowSelection } from "gridjs-selection";
+import { handleRouting } from "@/utility/routing-helper";
+import { handleDeleteData } from "@/services/services";
 
-const CandidateTestView = ({ base_url = "", akses = "" }) => {
+const DepartementViews = ({ base_url = "", akses = "" }) => {
   const router = useRouter();
-
   const [filterKeyword, setFilterKeyword] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [refresh, setRefresh] = useState(false);
@@ -78,31 +74,31 @@ const CandidateTestView = ({ base_url = "", akses = "" }) => {
     }
   };
 
-  const handleFilter = (e: any) => {
-    e.preventDefault();
-    setFilterKeyword(
-      filterData.keyword == "" ? filterKeyword : filterData.keyword
-    );
-    setFilterDate(filterData.date == "" ? filterDate : filterData.date);
-  };
-
   useEffect(() => {
     if (!router.isReady) return;
   }, [router.isReady]);
 
   return (
     <>
-      <PageTitle titlePage={"Data"} subTitle="Candidate Test" />
+      <PageTitle titlePage={"Master"} subTitle="Department" />
 
       <div className="row">
         <div className="col-lg-12">
           <div className="card" id="tasksList">
             <div className="card-header border-0">
               <div className="d-flex align-items-center">
-                <h5 className="card-title mb-0 flex-grow-1">
-                  Candidate Test List
-                </h5>
+                <h5 className="card-title mb-0 flex-grow-1">Department List</h5>
                 <div className="flex-shrink-0">
+                  {akses.includes("create") ? (
+                    <Link
+                      href={base_url + "/add"}
+                      className="btn btn-success add-btn"
+                      id="create-btn"
+                    >
+                      <i className="ri-add-line align-bottom me-1"></i> Create
+                    </Link>
+                  ) : null}
+
                   {akses.includes("delete") ? (
                     <button
                       className="btn btn-soft-danger"
@@ -115,6 +111,7 @@ const CandidateTestView = ({ base_url = "", akses = "" }) => {
                 </div>
               </div>
             </div>
+
 
             <GridSearch
               base_url={base_url}
@@ -140,7 +137,7 @@ const CandidateTestView = ({ base_url = "", akses = "" }) => {
                     </>
                   ),
                   width: "50px",
-                  formatter: (cell: any, row : any, column : any) => {
+                  formatter: (cell: any, row: any, column: any) => {
                     return _(
                       <>
                         <div className="form-check">
@@ -159,36 +156,16 @@ const CandidateTestView = ({ base_url = "", akses = "" }) => {
                   },
                 },
                 {
+                  id: "department_name",
+                  name: "NAME",
+                },
+                {
                   id: "code",
-                  name: "KODE TEST",
-                },
-                {
-                  id: "category_name",
-                  name: "KATEGORI TEST",
-                },
-                {
-                  id: "nama_candidate",
-                  name: "NAMA CANDIDATE",
-                },
-                {
-                  id: "remarks",
-                  name: "KETERANGAN",
-                },
-                {
-                  id: "date_schedule",
-                  name: "TANGGAL SUBMIT",
-                },
-                {
-                  id: "nama_job",
-                  name: "JOB",
-                },
-                {
-                  id: "status",
-                  name: "STATUS",
+                  name: "CODE",
                 },
                 {
                   name: "Actions",
-                  formatter(cell: any, row: any, column : any) {
+                  formatter(cell: any, row: any, column: any) {
                     return _(
                       <>
                         <ul className="list-inline hstack gap-2 mb-0">
@@ -207,7 +184,8 @@ const CandidateTestView = ({ base_url = "", akses = "" }) => {
                               onClick={(e) =>
                                 handleRouting(
                                   e,
-                                  base_url + "/details?id=" + row.cells[0].data, router
+                                  base_url + "/details?id=" + row.cells[0].data,
+                                  router
                                 )
                               }
                               className="text-primary d-inline-block"
@@ -215,6 +193,32 @@ const CandidateTestView = ({ base_url = "", akses = "" }) => {
                               <i className="ri-eye-fill fs-16"></i>
                             </Link>
                           </li>
+                          {akses.includes("update") ? (
+                            <li
+                              className="list-inline-item edit"
+                              data-bs-toggle="tooltip"
+                              data-bs-trigger="hover"
+                              data-bs-placement="top"
+                              title=""
+                              data-bs-original-title="Edit"
+                            >
+                              <Link
+                                href={
+                                  base_url + "/edit?id=" + row.cells[0].data
+                                }
+                                className="text-primary d-inline-block edit-item-btn"
+                                onClick={(e) =>
+                                  handleRouting(
+                                    e,
+                                    base_url + "/edit?id=" + row.cells[0].data,
+                                    router
+                                  )
+                                }
+                              >
+                                <i className="ri-pencil-fill fs-16"></i>
+                              </Link>
+                            </li>
+                          ) : null}
                           {akses.includes("delete") ? (
                             <li
                               className="list-inline-item"
@@ -262,16 +266,7 @@ const CandidateTestView = ({ base_url = "", akses = "" }) => {
                   },
                 },
               ]}
-              value={[
-                "id",
-                "code",
-                "category_name",
-                "nama_candidate",
-                "remarks",
-                "date_schedule",
-                "nama_job",
-                "status",
-              ]}
+              value={["id", "department_name", "code"]}
               limit={25}
             />
           </div>
@@ -281,4 +276,4 @@ const CandidateTestView = ({ base_url = "", akses = "" }) => {
   );
 };
 
-export default CandidateTestView;
+export default DepartementViews;

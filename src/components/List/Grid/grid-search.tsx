@@ -11,11 +11,10 @@ import { handleDeleteData } from "@/services/services";
 import Message from "@/utility/message";
 
 const GridSearch = (props: any) => {
-  const { base_url = "", dataChecked = [], akses = "", value=[], columns = [], limit = 25 } = props;
+  const { base_url = "", dataChecked = [], akses = "", value=[], columns = [], limit = 25, refresh=false } = props;
   const router = useRouter();
   const [filterKeyword, setFilterKeyword] = useState("");
   const [filterDate, setFilterDate] = useState("");
-  const [refresh, setRefresh] = useState(false);
 
   const filterData = {
     keyword: "",

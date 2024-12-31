@@ -1,12 +1,12 @@
 import AlertMessage from "@/components/layouts/Alert/alert.message";
 import HeadTitlePage from "@/components/layouts/HeadTitlePage";
 import { checkPermission } from "@/utility/permission";
-import FormJobTestViews from "@/views/scheduling/job-test/form/form-job-test";
+import FormDepartementViews from "@/views/master/department/form/form-departement";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-const JobTestAddage = () => {
-  const base_url = "/scheduling/job-test";
+const DepartmentEditPage = () => {
+  const base_url = "/master/department";
   const session = useSession();
   const [akses, setAkses]: any = useState([]);
   const permission = async () => {
@@ -18,25 +18,25 @@ const JobTestAddage = () => {
 
   useEffect(() => {
     if (akses.length > 0) return;
-    if (session.status == 'authenticated') {      
+    if (session.status == "authenticated") {      
       permission();
     }
   }, [akses, session.status]);
 
   return (
     <>
-      {akses.includes("create") ? (
+      {akses.includes("update") ? (
         <>
-        <HeadTitlePage subTitle="Job Test" />
-        <FormJobTestViews base_url={base_url}/>
+        <HeadTitlePage subTitle="Department" />
+        <FormDepartementViews base_url={base_url}/>
         </>
       ) : (
         <>
-          <AlertMessage message="Anda Tidak Mempunyai Akses Untuk Menu Ini" />
+          <AlertMessage message="Anda Tidak Mempunyai Akses Untuk Menu Ini"/>
         </>
       )}
     </>
   );
 };
 
-export default JobTestAddage;
+export default DepartmentEditPage;

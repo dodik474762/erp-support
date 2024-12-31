@@ -13,7 +13,7 @@ export default function Document() {
       data-sidebar-image="none"
     >
       <Head>
-        <script src="http://localhost:8097"></script>
+        {/* <script src="http://localhost:8097"></script> */}
         <link rel="icon" href="/assets/images/favicon.ico"></link>
         <link
           href="/assets/libs/gridjs/theme/mermaid.min.css"

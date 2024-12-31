@@ -6,9 +6,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 
-const MenuAddViews = ({
-  base_url = ''
-}) => {
+const MenuAddViews = ({ base_url = "" }) => {
   const router = useRouter();
 
   const Select = dynamic(() => import("react-select"), { ssr: false });
@@ -18,6 +16,7 @@ const MenuAddViews = ({
   const [icon, setIcon] = useState(``);
   const [errors, setErrors]: any = useState({});
   const [loading, setLoading] = useState(false);
+  const [routing, setRouting] = useState(false);
   const [dataParent, setDataParent] = useState([]);
   const [parent, setParent] = useState({ value: "", label: "" });
 
@@ -27,12 +26,13 @@ const MenuAddViews = ({
     path: path,
     icon: icon,
     parent: parent,
+    routing: routing
   };
 
   const fetDataParentMenu = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
-      process.env.API_BASE_URL + base_url+"/getParent",
+      process.env.API_BASE_URL + base_url + "/getParent",
       {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -82,17 +82,14 @@ const MenuAddViews = ({
     setLoading(true);
     if (validation(postData)) {
       const authToken = localStorage.getItem("authToken");
-      const req = await fetch(
-        process.env.API_BASE_URL + base_url+"/submit",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-          },
-          body: JSON.stringify(postData),
-        }
-      );
+      const req = await fetch(process.env.API_BASE_URL + base_url + "/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(postData),
+      });
       if (req.status == 200 || req.status == 201) {
         const res = await req.json();
         if (res.is_valid) {
@@ -199,6 +196,27 @@ const MenuAddViews = ({
                   <div className="invalid-feedback">
                     Please Enter a icon menu
                   </div>
+                </div>
+                <div className="mb-3">
+                  {routing == true ? (
+                    <input
+                      type="checkbox"
+                      className=""
+                      id="product-title-input"
+                      checked
+                      onChange={(e: any) => setRouting(e.target.checked)}
+                    />
+                  ) : (
+                    <input
+                      type="checkbox"
+                      className=""
+                      id="product-title-input"
+                      onChange={(e: any) => setRouting(e.target.checked)}
+                    />
+                  )}{" "}
+                  <label className="form-label" htmlFor="product-title-input">
+                    Routing
+                  </label>
                 </div>
               </div>
             </div>

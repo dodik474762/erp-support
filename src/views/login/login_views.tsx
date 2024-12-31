@@ -134,13 +134,13 @@ const LoginViews = () => {
                             <div className="carousel-inner text-center text-white-50 pb-5">
                               <div className="carousel-item active">
                                 <p className="fs-15 fst-italic">
-                                  Great! Maintainable Your HRD Psycotest System.
+                                  Great! Maintainable Your ERP Support System.
                                   Thanks very much!
                                 </p>
                               </div>
                               <div className="carousel-item">
                                 <p className="fs-15 fst-italic">
-                                  Great! Maintainable Your HRD Psycotest System.
+                                  Great! Maintainable Your ERP Support System.
                                   Thanks very much!
                                 </p>
                               </div>
@@ -173,7 +173,7 @@ const LoginViews = () => {
                       <div>
                         <h5 className="text-primary">Welcome Back !</h5>
                         <p className="text-muted">
-                          Sign in to continue to HRD Satoria Group.
+                          Sign in to continue to ERP Support Satoria Group.
                         </p>
                       </div>
 
@@ -219,21 +219,6 @@ const LoginViews = () => {
                             </div>
                           </div>
 
-                          {/* <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="auth-remember-check"
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="auth-remember-check"
-                            >
-                              Remember me
-                            </label>
-                          </div> */}
-
                           <div className="mt-4">
                             {loading == true ? (
                               <ButtonLoading message="Loading..." w100 />
@@ -246,53 +231,7 @@ const LoginViews = () => {
                               </button>
                             )}
                           </div>
-
-                          {/* <div className="mt-4 text-center">
-                            <div className="signin-other-title">
-                              <h5 className="fs-13 mb-4 title">Sign In with</h5>
-                            </div>
-
-                            <div>
-                              <button
-                                type="button"
-                                className="btn btn-primary btn-icon waves-effect waves-light"
-                              >
-                                <i className="ri-facebook-fill fs-16"></i>
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-danger btn-icon waves-effect waves-light"
-                              >
-                                <i className="ri-google-fill fs-16"></i>
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-dark btn-icon waves-effect waves-light"
-                              >
-                                <i className="ri-github-fill fs-16"></i>
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-info btn-icon waves-effect waves-light"
-                              >
-                                <i className="ri-twitter-fill fs-16"></i>
-                              </button>
-                            </div>
-                          </div> */}
                         </form>
-                      </div>
-
-                      <div className="mt-5 text-center">
-                        <p className="mb-0">
-                          Dont have an account ?{" "}
-                          <a
-                            href="https://wa.me/6282244670886"
-                            className="fw-semibold text-primary text-decoration-underline"
-                          >
-                            {" "}
-                            Contact Admin
-                          </a>{" "}
-                        </p>
                       </div>
                     </div>
                   </div>

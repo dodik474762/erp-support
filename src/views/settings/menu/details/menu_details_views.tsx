@@ -97,6 +97,27 @@ const MenuDetailsViews = ({ base_url = "" }) => {
                     Please Enter a icon menu
                   </div>
                 </div>
+                <div className="mb-3">
+                  {data.routing == true ? (
+                    <input
+                    disabled
+                      type="checkbox"
+                      className=""
+                      id="product-title-input"
+                      checked
+                    />
+                  ) : (
+                    <input
+                    disabled
+                      type="checkbox"
+                      className=""
+                      id="product-title-input"
+                    />
+                  )}{" "}
+                  <label className="form-label" htmlFor="product-title-input">
+                    Routing
+                  </label>
+                </div>
               </div>
             </div>
 

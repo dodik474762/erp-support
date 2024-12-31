@@ -1,10 +1,10 @@
 #setup docker deployment
 FROM node:20
 
-RUN mkdir hris
-RUN cd hris
+RUN mkdir erp-support
+RUN cd erp-support
 
-WORKDIR /hris
+WORKDIR /erp-support
 
 COPY . .
 
