@@ -1,12 +1,12 @@
 import AlertMessage from "@/components/layouts/Alert/alert.message";
 import HeadTitlePage from "@/components/layouts/HeadTitlePage";
 import { checkPermission } from "@/utility/permission";
-import FormTestViews from "@/views/data/test/form/form-test-views";
+import FormAccountViews from "@/views/data/account/form/form-account";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-const JobEditPage = () => {
-  const base_url = "/data/test";
+const AccountEditPage = () => {
+  const base_url = "/data/account";
   const session = useSession();
   const [akses, setAkses]: any = useState([]);
   const permission = async () => {
@@ -27,8 +27,8 @@ const JobEditPage = () => {
     <>
       {akses.includes("update") ? (
         <>
-        <HeadTitlePage subTitle="Test" />
-        <FormTestViews base_url={base_url}/>
+        <HeadTitlePage subTitle="Account" />
+        <FormAccountViews base_url={base_url}/>
         </>
       ) : (
         <>
@@ -39,4 +39,4 @@ const JobEditPage = () => {
   );
 };
 
-export default JobEditPage;
+export default AccountEditPage;

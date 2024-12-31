@@ -5,25 +5,22 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Flatpickr from "react-flatpickr";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
-import { checkPermission } from "@/utility/permission";
-import { handleDeleteData } from "@/services/services";
-import { handleRouting } from "@/utility/routing-helper";
-import { RowSelection } from "gridjs-selection";
 import GridSearch from "@/components/List/Grid/grid-search";
+import { RowSelection } from "gridjs-selection";
+import { handleRouting } from "@/utility/routing-helper";
+import { handleDeleteData } from "@/services/services";
 
-const QuestionsDescribeView = ({ base_url = "", akses = "" }) => {
+const AccountViews = ({ base_url = "", akses = "" }) => {
   const router = useRouter();
-
   const [filterKeyword, setFilterKeyword] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [refresh, setRefresh] = useState(false);
-
   const filterData = {
     keyword: "",
     date: "",
   };
   let dataChecked: number[] = [];
+
   const handleCheck = (
     e: React.ChangeEvent<HTMLInputElement>,
     data: number
@@ -77,28 +74,20 @@ const QuestionsDescribeView = ({ base_url = "", akses = "" }) => {
     }
   };
 
-  const handleFilter = (e: any) => {
-    e.preventDefault();
-    setFilterKeyword(
-      filterData.keyword == "" ? filterKeyword : filterData.keyword
-    );
-    setFilterDate(filterData.date == "" ? filterDate : filterData.date);
-  };
-
   useEffect(() => {
     if (!router.isReady) return;
   }, [router.isReady]);
 
   return (
     <>
-      <PageTitle titlePage={"Data"} subTitle="Questions Describe" />
+      <PageTitle titlePage={"Data"} subTitle="Account" />
 
       <div className="row">
         <div className="col-lg-12">
           <div className="card" id="tasksList">
             <div className="card-header border-0">
               <div className="d-flex align-items-center">
-                <h5 className="card-title mb-0 flex-grow-1">Questions List</h5>
+                <h5 className="card-title mb-0 flex-grow-1">Account List</h5>
                 <div className="flex-shrink-0">
                   {akses.includes("create") ? (
                     <Link
@@ -122,6 +111,7 @@ const QuestionsDescribeView = ({ base_url = "", akses = "" }) => {
                 </div>
               </div>
             </div>
+
 
             <GridSearch
               base_url={base_url}
@@ -166,24 +156,16 @@ const QuestionsDescribeView = ({ base_url = "", akses = "" }) => {
                   },
                 },
                 {
-                  id: "category_name",
-                  name: "KATEGORI TEST",
+                  id: "account_name",
+                  name: "NAME",
                 },
                 {
-                  id: "judul_sub_test",
-                  name: "SUB TEST",
+                  id: "account_code",
+                  name: "CODE",
                 },
                 {
-                  id: "questions",
-                  name: "PERTANYAAN",
-                },
-                {
-                  id: "type",
-                  name: "TIPE TEST",
-                },
-                {
-                  id: "remarks",
-                  name: "KETERANGAN",
+                  id: "account_type",
+                  name: "TYPE",
                 },
                 {
                   name: "Actions",
@@ -288,7 +270,7 @@ const QuestionsDescribeView = ({ base_url = "", akses = "" }) => {
                   },
                 },
               ]}
-              value={["id", "category_name", "judul_sub_test", "questions", "type", "remarks"]}
+              value={["id", "account_name", "account_code", "account_type"]}
               limit={25}
             />
           </div>
@@ -298,4 +280,4 @@ const QuestionsDescribeView = ({ base_url = "", akses = "" }) => {
   );
 };
 
-export default QuestionsDescribeView;
+export default AccountViews;

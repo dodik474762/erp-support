@@ -1,12 +1,12 @@
 import AlertMessage from "@/components/layouts/Alert/alert.message";
 import HeadTitlePage from "@/components/layouts/HeadTitlePage";
 import { checkPermission } from "@/utility/permission";
-import FormCandidateViews from "@/views/data/candidate/form/form-candidate-views";
+import FormAccountViews from "@/views/data/account/form/form-account";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-const CandidateAddPage = () => {
-  const base_url = "/data/candidate";
+const AccountAddage = () => {
+  const base_url = "/data/account";
   const session = useSession();
   const [akses, setAkses]: any = useState([]);
   const permission = async () => {
@@ -27,8 +27,8 @@ const CandidateAddPage = () => {
     <>
       {akses.includes("create") ? (
         <>
-        <HeadTitlePage subTitle="Candidate" />
-        <FormCandidateViews base_url={base_url}/>
+        <HeadTitlePage subTitle="Account" />
+        <FormAccountViews base_url={base_url}/>
         </>
       ) : (
         <>
@@ -39,4 +39,4 @@ const CandidateAddPage = () => {
   );
 };
 
-export default CandidateAddPage;
+export default AccountAddage;

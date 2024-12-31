@@ -8,81 +8,81 @@ import { useRouter } from "next/router";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import ApiServices from "@/services/api.services";
+import moment from "moment-timezone";
 
-const FormJobViews = ({ base_url = "" }) => {
+const FormAccountViews = ({ base_url = "" }) => {
+    const Select = dynamic(() => import("react-select"), { ssr: false });
+
   const router = useRouter();
-  const id = router.query.id;
+  const id = router.query.id ?? "";
 
-  const Select = dynamic(() => import("react-select"), { ssr: false });
-
-  const [namaJob, setNamaJob] = useState(``);
+  const [name, setName] = useState(``);
   const [remarks, setRemarks] = useState(``);
   const [errors, setErrors]: any = useState({});
   const [loading, setLoading] = useState(false);
-  const [company, setCompany]: any = useState({});
-  const [companys, setCompanys]: any = useState([]);
+  const [type, setType] : any = useState(null);
+  const [types, setTypes] = useState([]);
 
   const postData: any = {
     id: id,
-    nama_job: namaJob,
+    name: name,
     remarks: remarks,
-    company: company,
-  };
-
-  const fetchDataCompany = async () => {
-    const authToken = localStorage.getItem("authToken");
-    const req = await fetch(
-      process.env.API_BASE_URL + "/master/company/getAll",
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
-    const res = await req.json();
-    if (res.is_valid) {
-      const value = res.data.map((item: any) => {
-        return { value: item.id, label: item.nama };
-      });
-      setCompanys(value);
-    }
+    account_type: type
   };
 
   const fetchData = async () => {
     setLoading(true);
     const req: any = await ApiServices.getDataById(String(id), base_url);
     if (req.is_valid == true) {
-      setNamaJob(req.data.nama_job);
       setRemarks(req.data.remarks);
-      setCompany({
-        value: req.data.code_company,
-        label: req.data.nama_company,
-      });
+      setName(req.data.account_name);
+      setType({ value: req.data.account_type, label: req.data.account_type_name });
     }
     setLoading(false);
   };
 
+  const fetchDataAccountType = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const req = await fetch(process.env.API_BASE_URL +"/master/dictionary/getAll?context=COA", {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    const res = await req.json();
+    if (res) {
+      if (res.is_valid) {
+        const val: any = [];
+        res.data.map((item: any) => {
+          // console.log(item);
+          val.push({ value: item.term_id, label: item.keterangan });
+        });
+
+        setTypes(val);
+      }
+    }
+  };
+
   const handleSelectionChange = (e: any) => {
-    companys.forEach((option: any) => {
+    types.forEach((option: any) => {
       if (option.value === e.value) {
-        setCompany(option);
+        setType(option);
       }
     });
   };
 
   const validation = (data: any): boolean => {
-    if (Object.keys(data.company).length == 0) {
-      setErrors({ message: "Perusahaan Harus Diisi" });
-      return false;
-    }
-
-    if (data.nama_job == "") {
-      setErrors({ message: "Nama Job Harus Diisi" });
+    if (data.name == "") {
+      setErrors({ message: "Nama Harus Diisi" });
       return false;
     }
 
     if (data.remarks == "") {
       setErrors({ message: "Remarks Harus Diisi" });
+      return false;
+    }
+
+    if (data.account_type == null || Object.keys(data.account_type).length == 0) {
+      setErrors({ message: "Type Harus Diisi" });
       return false;
     }
 
@@ -111,16 +111,15 @@ const FormJobViews = ({ base_url = "" }) => {
 
   useEffect(() => {
     if (!router.isReady) return;
+    fetchDataAccountType();
     if (id) {
       fetchData();
     }
-
-    fetchDataCompany();
   }, [router.isReady]);
 
   return (
     <>
-      <PageTitle titlePage="Data" subTitle="Job Vacancy Add" />
+      <PageTitle titlePage="Form Account" subTitle="Account Add" />
 
       {errors == null ? null : (
         <>
@@ -140,35 +139,38 @@ const FormJobViews = ({ base_url = "" }) => {
         <div className="row">
           <div className="col-lg-8">
             <div className="card">
+              <div className="card-header">
+                <h5 className="card-title mb-0">Chart of Account</h5>
+              </div>
               <div className="card-body">
                 <div className="mb-3">
                   <label className="form-label" htmlFor="product-title-input">
-                    Perusahaan
-                  </label>
-                  <Select
-                    options={companys}
-                    onChange={(e: any) => handleSelectionChange(e)}
-                    defaultValue={company}
-                  />
-                  <div className="invalid-feedback">
-                    Please Enter a parent menu
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Nama Job
+                    Nama
                   </label>
                   <input
                     type="text"
                     className="form-control"
                     id="product-title-input"
-                    placeholder="Enter nama job"
-                    value={namaJob}
-                    onInput={(e: any) => setNamaJob(e.target.value)}
+                    placeholder="Enter nama"
+                    value={name}
+                    onInput={(e: any) => setName(e.target.value)}
                   />
                   <div className="invalid-feedback">
-                    Please Enter a nama job
+                    Please Enter a nama
                   </div>
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="choices-publish-status-input"
+                    className="form-label"
+                  >
+                   Type
+                  </label>
+                  <Select
+                    defaultValue={type}
+                    onChange={(e: any) => handleSelectionChange(e)}
+                    options={types}
+                  />
                 </div>
                 <div className="mb-3">
                   <label className="form-label" htmlFor="product-title-input">
@@ -217,4 +219,4 @@ const FormJobViews = ({ base_url = "" }) => {
   );
 };
 
-export default FormJobViews;
+export default FormAccountViews;
