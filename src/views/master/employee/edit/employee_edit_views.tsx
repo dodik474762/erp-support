@@ -19,12 +19,15 @@ const EmployeeEditViews = ({ base_url = "" }) => {
   const [loading, setLoading] = useState(false);
   const [dataJobTitle, setDataJobTitle]: any = useState([]);
   const [job_title, setJobTitle]: any = useState(null);
+  const [department, setDepartment]: any = useState(null);
+  const [dataDepartment, setDataDepartment]: any = useState([]);
 
   const postData: any = {
     id: id,
     name: name,
     address: address,
     job_title: job_title,
+    department: department,
   };
 
   const fetchData = async () => {
@@ -34,6 +37,7 @@ const EmployeeEditViews = ({ base_url = "" }) => {
       setName(res.data.name);
       setAddress(res.data.address);
       setJobTitle({ value: res.data.job_title, label: res.data.job_name });
+      setDepartment({ value: res.data.department, label: res.data.department_name });
     }
     setLoading(false);
   };
@@ -62,6 +66,34 @@ const EmployeeEditViews = ({ base_url = "" }) => {
     }
   };
 
+  const fetchDataDepartment = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const req = await fetch(process.env.API_BASE_URL +"/master/department/getAll", {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    const res = await req.json();
+    if (res) {
+      if (res.is_valid) {
+        const val: any = [];
+        res.data.map((item: any) => {
+          val.push({ value: item.id, label: item.department_name });
+        });
+
+        setDataDepartment(val);
+      }
+    }
+  };
+
+  const handleSelectionDepartment = (e: any) => {
+    dataDepartment.forEach((option: any) => {
+      if (option.value === e.value) {
+        setDepartment(option);
+      }
+    });
+  };
+
   const handleSelectionChange = (e: any) => {
     dataJobTitle.forEach((option: any) => {
       if (option.value === e.value) {
@@ -83,6 +115,11 @@ const EmployeeEditViews = ({ base_url = "" }) => {
 
     if (!data.job_title) {
       setErrors({ message: "Job Title Harus Diisi" });
+      return false;
+    }
+    
+    if (!data.department) {
+      setErrors({ message: "Department Harus Diisi" });
       return false;
     }
 
@@ -131,6 +168,7 @@ const EmployeeEditViews = ({ base_url = "" }) => {
     if (!router.isReady) return;
 
     fetchDataJobTitle();
+    fetchDataDepartment();
     fetchData();
   }, [router.isReady]);
 
@@ -168,6 +206,19 @@ const EmployeeEditViews = ({ base_url = "" }) => {
                     defaultValue={job_title}
                     onChange={(e: any) => handleSelectionChange(e)}
                     options={dataJobTitle}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="choices-publish-status-input"
+                    className="form-label"
+                  >
+                    Department
+                  </label>
+                  <Select
+                    defaultValue={department}
+                    onChange={(e: any) => handleSelectionDepartment(e)}
+                    options={dataDepartment}
                   />
                 </div>
                 <div className="mb-3">

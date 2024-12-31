@@ -72,6 +72,22 @@ const EmployeeDetailsViews = ({
                     Please Enter a name.
                   </div>
                 </div>
+              <div className="mb-3">
+                  <label className="form-label" htmlFor="product-title-input">
+                    Department
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="product-title-input"
+                    placeholder="Department"
+                    value={data.department_name}
+                    disabled
+                  />
+                  <div className="invalid-feedback">
+                    Please Enter a name.
+                  </div>
+                </div>
                 <div className="mb-3">
                   <label className="form-label" htmlFor="product-title-input">
                     Name
