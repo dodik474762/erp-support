@@ -45,6 +45,23 @@ const FormRoutingViews = ({ base_url = "" }) => {
     if (req.is_valid == true) {
       setRemarks(req.data.remarks);
       setName(req.data.department_name);
+      setMenu({
+        value: req.data.menu,
+        label: req.data.menu_name,
+      });
+      const itemsRouting = [];
+      let no = 1;
+      for (let index = 0; index < req.data.items.length; index++) {
+        const element = req.data.items[index];
+        itemsRouting.push({
+            id: no++,
+            type: {value: element.state, label: element.type_name},
+            users: {value: element.users, label: element.users_name},
+        });        
+      }
+
+      setItems(itemsRouting);
+      dataRoutingLines.current = itemsRouting;
     }
     setLoading(false);
   };
