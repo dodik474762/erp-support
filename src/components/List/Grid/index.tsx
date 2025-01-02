@@ -62,6 +62,7 @@ const GridList = (props: any) => {
   const handlePageChange = (page: number) => {
     if (page < 0 || page > totalPages) return; // Prevent out-of-range page numbers
     dispatch({ type: actionTypes.SET_PAGE, payload: page });
+    console.log(page, totalRecords, totalData);
   };
 
   // Generate page numbers for the pagination control
