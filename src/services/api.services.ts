@@ -97,7 +97,7 @@ const ApiServices = {
           } else {
             resolve({
               is_valid: false,
-              message: "error",
+              message: res.message,
             });
           }
         })
