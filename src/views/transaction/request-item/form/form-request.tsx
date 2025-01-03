@@ -31,7 +31,6 @@ const FormRequestItemViews = ({ base_url = "" }) => {
     id: id,
     item_name: name,
     departement: department,
-    account: account,
     remarks: remarks,
   };
 
@@ -149,7 +148,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
   useEffect(() => {
     if (!router.isReady) return;
     fetchDataDepartment();
-    fetchDataAccount();
+    // fetchDataAccount();
     if (id) {
       fetchData();
     }
@@ -223,20 +222,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                   <div className="invalid-feedback">
                     Please Enter a keterangan
                   </div>
-                </div>
-                <div className="mb-3">
-                  <label
-                    htmlFor="choices-publish-status-input"
-                    className="form-label"
-                  >
-                    Account
-                  </label>
-                  <Select
-                    defaultValue={account}
-                    onChange={(e: any) => handleSelectionAccountChange(e)}
-                    options={accounts}
-                  />
-                </div>
+                </div>               
               </div>
             </div>
 
