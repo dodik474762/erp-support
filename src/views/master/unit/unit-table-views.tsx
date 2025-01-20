@@ -87,7 +87,7 @@ const UnitTableViews = ({
                 name: "NAME",
               },
               {
-                name: "CODE",
+                name: "REMARKS",
               },
               {
                 name: "Actions",
@@ -187,7 +187,7 @@ const UnitTableViews = ({
                 return result.data.map((resp: any, index: number) => [
                   resp.id,
                   resp.name,
-                  resp.code,
+                  resp.remarks,
                   null,
                 ]);
               },
