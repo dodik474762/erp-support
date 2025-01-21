@@ -157,6 +157,190 @@ const FormRequestItemViews = ({ base_url = "" }) => {
     }
   };
   
+  const fetchDataProductType = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const req = await fetch(
+      process.env.API_BASE_URL + "/master/product-type/getAll",
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const res = await req.json();
+    if (res) {
+      if (res.is_valid) {
+        const val: any = [];
+        res.data.map((item: any) => {
+          val.push({ value: item.id, label: item.type });
+        });
+
+        setTypeProducts(val);
+      }
+    }
+  };
+  
+  const fetchDataSubsidiarys = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const req = await fetch(
+      process.env.API_BASE_URL + "/master/subsidiary/getAll",
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const res = await req.json();
+    if (res) {
+      if (res.is_valid) {
+        const val: any = [];
+        res.data.map((item: any) => {
+          val.push({ value: item.id, label: item.type });
+        });
+
+        setSubsidiarys(val);
+      }
+    }
+  };
+  
+  const fetchDataTaxSchedule = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const req = await fetch(
+      process.env.API_BASE_URL + "/master/tax-schedule/getAll",
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const res = await req.json();
+    if (res) {
+      if (res.is_valid) {
+        const val: any = [];
+        res.data.map((item: any) => {
+          val.push({ value: item.id, label: item.type });
+        });
+
+        setTaxSchedules(val);
+      }
+    }
+  };
+  
+  const fetchDataPlanningItem = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const req = await fetch(
+      process.env.API_BASE_URL + "/master/planning-item/getAll",
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const res = await req.json();
+    if (res) {
+      if (res.is_valid) {
+        const val: any = [];
+        res.data.map((item: any) => {
+          val.push({ value: item.id, label: item.type });
+        });
+
+        setPlanningItemCategorys(val);
+      }
+    }
+  };
+ 
+  const fetchDataGroupType = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const req = await fetch(
+      process.env.API_BASE_URL + "/master/group-type/getAll",
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const res = await req.json();
+    if (res) {
+      if (res.is_valid) {
+        const val: any = [];
+        res.data.map((item: any) => {
+          val.push({ value: item.id, label: item.type });
+        });
+
+        setGroupTypes(val);
+      }
+    }
+  };
+  
+  const fetchDataVolumeType = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const req = await fetch(
+      process.env.API_BASE_URL + "/master/volume-type/getAll",
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const res = await req.json();
+    if (res) {
+      if (res.is_valid) {
+        const val: any = [];
+        res.data.map((item: any) => {
+          val.push({ value: item.id, label: item.type });
+        });
+
+        setVolumeTypes(val);
+      }
+    }
+  };
+  
+  const fetchDataReplanishmentMethod = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const req = await fetch(
+      process.env.API_BASE_URL + "/master/replanishment-method/getAll",
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const res = await req.json();
+    if (res) {
+      if (res.is_valid) {
+        const val: any = [];
+        res.data.map((item: any) => {
+          val.push({ value: item.id, label: item.type });
+        });
+
+        setReplenismentMethods(val);
+      }
+    }
+  };
+  
+  const fetchDataCostCategory = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const req = await fetch(
+      process.env.API_BASE_URL + "/master/cost-category/getAll",
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const res = await req.json();
+    if (res) {
+      if (res.is_valid) {
+        const val: any = [];
+        res.data.map((item: any) => {
+          val.push({ value: item.id, label: item.type });
+        });
+
+        setCostCategorys(val);
+      }
+    }
+  };
+  
   const fetchDataUnit = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
@@ -200,7 +384,18 @@ const FormRequestItemViews = ({ base_url = "" }) => {
           });
         });
 
-        setAccounts(val);
+        setCogsAccounts(val);
+        setAssetAccounts(val);
+        setIncomeAccounts(val);
+        setGainAccounts(val);
+        setPriceVarianAccounts(val);
+        setQtyVarianAccounts(val);
+        setExchangeAccounts(val);
+        setWipAccounts(val);
+        setScrapAccounts(val);
+        setWpAccounts(val);
+        setUnbuildAccounts(val);
+        setAdjustAccounts(val);
       }
     }
   };
@@ -315,7 +510,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
     if (type == "asset_account") {
       assetAccounts.forEach((option: any) => {
         if (option.value === e.value) {
-          setAccount(option);
+          setAssetAcount(option);
         }
       });
     }
@@ -357,7 +552,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
     if (type == "wip_variant_account") {
       wipAccounts.forEach((option: any) => {
         if (option.value === e.value) {
-          wipAcount(option);
+          setWipAcount(option);
         }
       });
     }
@@ -452,6 +647,15 @@ const FormRequestItemViews = ({ base_url = "" }) => {
     if (!router.isReady) return;
     fetchDataDepartment();
     fetchDataUnit();
+    fetchDataProductType();
+    fetchDataGroupType();
+    fetchDataVolumeType();
+    fetchDataReplanishmentMethod();
+    fetchDataCostCategory();
+    fetchDataPlanningItem();
+    fetchDataSubsidiarys();
+    fetchDataTaxSchedule();
+    fetchDataAccount();
     if (id) {
       fetchData();
     }

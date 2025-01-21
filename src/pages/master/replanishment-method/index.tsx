@@ -1,11 +1,11 @@
 import HeadTitlePage from "@/components/layouts/HeadTitlePage";
 import { checkPermission } from "@/utility/permission";
-import MasterProductTypeViews from "@/views/master/product_type/product_type";
+import MasterReplanishmentMethodViews from "@/views/master/replanishment-method/replanishment_method";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-const MasterProductTypePage = () => {
-  const base_url = "/master/product-type";
+const MasterReplanishmentMethodPage = () => {
+  const base_url = "/master/replanishment-method";
   const session = useSession();
   const [akses, setAkses]: any = useState([]);
   const permission = async () => {
@@ -24,9 +24,9 @@ const MasterProductTypePage = () => {
   }, [akses, session.status]);
 
   return <>
-  <HeadTitlePage subTitle="Product Type" />
-  <MasterProductTypeViews base_url={base_url} akses={akses} />
+  <HeadTitlePage subTitle="Replanishment Method" />
+  <MasterReplanishmentMethodViews base_url={base_url} akses={akses} />
   </>;
 };
 
-export default MasterProductTypePage;
+export default MasterReplanishmentMethodPage;

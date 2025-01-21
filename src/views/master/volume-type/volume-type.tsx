@@ -15,7 +15,7 @@ import { handleDeleteData } from "@/services/services";
 import { handleDelete } from "@/utility/helper";
 import GridSearch from "@/components/List/Grid/grid-search";
 
-const MasterProductTypeViews = ({ base_url = "", akses = "" }) => {
+const MasterVolumeTypeViews = ({ base_url = "", akses = "" }) => {
   const router = useRouter();
   const [refresh, setRefresh] = useState(false);
   let dataChecked: any = [];
@@ -53,14 +53,14 @@ const MasterProductTypeViews = ({ base_url = "", akses = "" }) => {
 
   return (
     <>
-      <PageTitle titlePage={"Master"} subTitle="Product Type" />
+      <PageTitle titlePage={"Master"} subTitle="Volume Type" />
 
       <div className="row">
         <div className="col-lg-12">
           <div className="card" id="tasksList">
             <div className="card-header border-0">
               <div className="d-flex align-items-center">
-                <h5 className="card-title mb-0 flex-grow-1">Roles List</h5>
+                <h5 className="card-title mb-0 flex-grow-1">Volume Type List</h5>
                 <div className="flex-shrink-0">
                   {akses.includes("create") ? (
                     <Link
@@ -268,4 +268,4 @@ const MasterProductTypeViews = ({ base_url = "", akses = "" }) => {
   );
 };
 
-export default MasterProductTypeViews;
+export default MasterVolumeTypeViews;
