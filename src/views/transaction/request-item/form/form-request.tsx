@@ -49,6 +49,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
   const [costCategorys, setCostCategorys]: any = useState([]);
   const [costCategory, setCostCategory]: any = useState(null);
   const [autoCalculate, setAutoCalculate] = useState(false);
+  const [generateAccural, setGenerateAccural] = useState(false);
   const [purchasePrice, setPurchasePrice] = useState(0);
   const [planningItemCategorys, setPlanningItemCategorys]: any = useState([]);
   const [planningItemCategory, setPlanningItemCategory]: any = useState(null);
@@ -82,6 +83,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
   const [unbuildAcount, setUnbuildAcount]: any = useState(null);
   const [adjustAccounts, setAdjustAccounts]: any = useState([]);
   const [adjustAcount, setAdjustAcount]: any = useState(null);
+  const [status, setStatus]: any = useState(``);
   const dataSalesItemLines = useRef([]) as any;
 
   const postData: any = {
@@ -100,6 +102,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
     costCategory: costCategory,
     replanishmentMethod: replanishmentMethod,
     autoCalculate: autoCalculate,
+    generateAccural: generateAccural,
     purchasePrice: purchasePrice,
     planningItemCategory: planningItemCategory,
     remarks: remarks,
@@ -129,7 +132,149 @@ const FormRequestItemViews = ({ base_url = "" }) => {
         value: req.data.departemen,
         label: req.data.departemen_name,
       });
-      setAccount({ value: req.data.account, label: req.data.account_name });
+      setSubsidiary({
+        value: req.data.subsidiary,
+        label: req.data.subsidiary_type,
+      });
+      setTypeProduct({
+        value: req.data.product_type,
+        label: req.data.product_type_name,
+      });
+      setUnitType({
+        value: req.data.primary_unit,
+        label: req.data.primary_unit_name,
+      });
+      setStockUnitType({
+        value: req.data.primary_stock_unit,
+        label: req.data.primary_stock_unit_name,
+      });
+      setPurchaseUnit({
+        value: req.data.primary_purchase_unit,
+        label: req.data.primary_purchase_unit_name,
+      });
+      setSalesUnit({
+        value: req.data.primary_sale_unit,
+        label: req.data.primary_sale_unit_name,
+      });
+      setVolumeType({
+        value: req.data.volume_type,
+        label: req.data.volume_type_name,
+      });
+      setGroupType({
+        value: req.data.group_type,
+        label: req.data.group_type_name,
+      });
+      setIncubationDay(req.data.incubation_days);
+      setCostCategory({
+        value: req.data.cost_category,
+        label: req.data.cost_category_name,
+      });
+      setReplanishmentMethod({
+        value: req.data.replanisment_method,
+        label: req.data.replanisment_method_name,
+      });
+      setAutoCalculate(req.data.auto_calculate);
+      setGenerateAccural(req.data.generate_accrual);
+      setPurchasePrice(req.data.purchase_price);
+      setPlanningItemCategory({
+        value: req.data.planning_item_category,
+        label: req.data.planning_item_name,
+      });
+      setTaxSchedule({
+        value: req.data.tax_schedule,
+        label: req.data.tax_schedule_name,
+      });
+      if(req.data.account){
+        setCogsAcount({
+          value: req.data.account,
+          label: req.data.account_name,
+        });
+      }
+      if(req.data.asset_account){
+        setAssetAcount({
+          value: req.data.asset_account,
+          label: req.data.asset_account_name,
+        });
+      }
+      if(req.data.income_account){
+        setIncomeAcount({
+          value: req.data.income_account,
+          label: req.data.income_account_name,
+        });
+      }
+      if(req.data.gain_account){
+        setGainAcount({
+          value: req.data.gain_account,
+          label: req.data.gain_account_name,
+        });
+      }
+      if(req.data.price_account){
+        setPriceVarianAccount({
+          value: req.data.price_account,
+          label: req.data.price_account_name,
+        });
+      }
+      if(req.data.qty_account){
+        setQtyVarianAcount({
+          value: req.data.qty_account,
+          label: req.data.qty_account_name,
+        });
+      }
+      if(req.data.rate_account){
+        setExchangeAcount({
+          value: req.data.rate_account,
+          label: req.data.rate_account_name,
+        });
+      }
+      if(req.data.wip_account){
+        setWipAcount({
+          value: req.data.wip_account,
+          label: req.data.wip_account_name,
+        });
+      }
+      if(req.data.scrap_account){
+        setScrapAcount({
+          value: req.data.scrap_account,
+          label: req.data.scrap_account_name,
+        });
+      }
+      if(req.data.wip_cost_account){
+        setWpAcount({
+          value: req.data.wip_cost_account,
+          label: req.data.wip_cost_account_name,
+        });
+      }
+      if(req.data.unbuild_account){
+        setUnbuildAcount({
+          value: req.data.unbuild_account,
+          label: req.data.unbuild_account_name,
+        });
+      }
+      if(req.data.adjust_account){
+        setAdjustAcount({
+          value: req.data.adjust_account,
+          label: req.data.adjust_account_name,
+        });
+      }
+      setStatus(req.data.status);
+
+      /*sales item */
+      const sales_item = req.origin.sales_item;
+      const resultSalesItem = [];
+      for (let index = 0; index < sales_item.length; index++) {
+        const element = sales_item[index];
+        resultSalesItem.push({
+          id: index + 1,
+          price: element.price,
+          type: {
+            value: element.type_price,
+            label: element.type_price_name,
+          },
+        });
+      }
+      setSalesItems(resultSalesItem);
+      dataSalesItemLines.current = resultSalesItem;
+      /*sales item */
     }
     setLoading(false);
   };
@@ -156,7 +301,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       }
     }
   };
-  
+
   const fetchDataProductType = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
@@ -179,7 +324,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       }
     }
   };
-  
+
   const fetchDataSubsidiarys = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
@@ -202,7 +347,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       }
     }
   };
-  
+
   const fetchDataTaxSchedule = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
@@ -225,7 +370,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       }
     }
   };
-  
+
   const fetchDataPlanningItem = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
@@ -248,7 +393,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       }
     }
   };
- 
+
   const fetchDataGroupType = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
@@ -271,7 +416,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       }
     }
   };
-  
+
   const fetchDataVolumeType = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
@@ -294,7 +439,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       }
     }
   };
-  
+
   const fetchDataReplanishmentMethod = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
@@ -317,7 +462,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       }
     }
   };
-  
+
   const fetchDataCostCategory = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
@@ -340,17 +485,37 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       }
     }
   };
-  
-  const fetchDataUnit = async () => {
+
+  const fetchDataPriceType = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
-      process.env.API_BASE_URL + "/master/unit/getAll",
+      process.env.API_BASE_URL + "/master/price-type/getAll",
       {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       }
     );
+    const res = await req.json();
+    if (res) {
+      if (res.is_valid) {
+        const val: any = [];
+        res.data.map((item: any) => {
+          val.push({ value: item.id, label: item.type });
+        });
+
+        setTypePrices(val);
+      }
+    }
+  };
+
+  const fetchDataUnit = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const req = await fetch(process.env.API_BASE_URL + "/master/unit/getAll", {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
     const res = await req.json();
     if (res) {
       if (res.is_valid) {
@@ -588,6 +753,11 @@ const FormRequestItemViews = ({ base_url = "" }) => {
 
   const handleAddItems = async (e: any, price: any, type: any) => {
     const typePrice = type;
+    if (type == null) {
+      setErrors({ message: "Type Price Harus Diisi" });
+      Message.info("Type Price Harus Diisi");
+      return;
+    }
     const result = {
       id: dataSalesItemLines.current.length + 1,
       price: price,
@@ -614,8 +784,69 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       return false;
     }
 
+    if (data.incubationDay == "") {
+      setErrors({ message: "Incubation Days Harus Diisi" });
+      return false;
+    }
+
+    if (data.purchasePrice == "") {
+      setErrors({ message: "Purchase Price Harus Diisi" });
+      return false;
+    }
+
     if (data.departement == null || Object.keys(data.departement).length == 0) {
       setErrors({ message: "Department Harus Diisi" });
+      return false;
+    }
+
+    if (data.subsidiary == null || Object.keys(data.subsidiary).length == 0) {
+      setErrors({ message: "Subsidiary Harus Diisi" });
+      return false;
+    }
+
+    if (data.unitType == null || Object.keys(data.unitType).length == 0) {
+      setErrors({ message: "Primary Unit Harus Diisi" });
+      return false;
+    }
+
+    if (data.unitStock == null || Object.keys(data.unitStock).length == 0) {
+      setErrors({ message: "Primary Unit Stock Harus Diisi" });
+      return false;
+    }
+
+    if (
+      data.unitPurchase == null ||
+      Object.keys(data.unitPurchase).length == 0
+    ) {
+      setErrors({ message: "Primary Unit Purchase Harus Diisi" });
+      return false;
+    }
+
+    if (data.unitSales == null || Object.keys(data.unitSales).length == 0) {
+      setErrors({ message: "Primary Unit Sales Harus Diisi" });
+      return false;
+    }
+
+    if (
+      data.costCategory == null ||
+      Object.keys(data.costCategory).length == 0
+    ) {
+      setErrors({ message: "Cost Category Sales Harus Diisi" });
+      return false;
+    }
+
+    if (data.taxSchedule == null || Object.keys(data.taxSchedule).length == 0) {
+      setErrors({ message: "Tax Schedule Harus Diisi" });
+      return false;
+    }
+
+    if (data.typeProduct == null || Object.keys(data.typeProduct).length == 0) {
+      setErrors({ message: "Product Type Harus Diisi" });
+      return false;
+    }
+
+    if (data.sales_items.length == 0) {
+      setErrors({ message: "Harga Sales Produk Harus Diisi" });
       return false;
     }
 
@@ -628,6 +859,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
     setLoading(true);
     if (validation(postData)) {
       postData.users = session.data.user.id;
+      // console.log(postData);
       const req: any = await ApiServices.submit(base_url, postData, "");
       if (req.is_valid == true) {
         Message.success("Data Berhasil Diproses");
@@ -656,6 +888,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
     fetchDataSubsidiarys();
     fetchDataTaxSchedule();
     fetchDataAccount();
+    fetchDataPriceType();
     if (id) {
       fetchData();
     }
@@ -928,6 +1161,31 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                   </label>
                 </div>
                 <div className="mb-3">
+                  {generateAccural == true ? (
+                    <input
+                      type="checkbox"
+                      className=""
+                      id="product-title-input"
+                      checked
+                      onChange={(e: any) =>
+                        setGenerateAccural(e.target.checked)
+                      }
+                    />
+                  ) : (
+                    <input
+                      type="checkbox"
+                      className=""
+                      id="product-title-input"
+                      onChange={(e: any) =>
+                        setGenerateAccural(e.target.checked)
+                      }
+                    />
+                  )}{" "}
+                  <label className="form-label" htmlFor="product-title-input">
+                    Generate Accural
+                  </label>
+                </div>
+                <div className="mb-3">
                   <label className="form-label" htmlFor="product-title-input">
                     Purchase Price
                   </label>
@@ -999,14 +1257,18 @@ const FormRequestItemViews = ({ base_url = "" }) => {
               {loading ? (
                 <ButtonLoading message="Loading Proses Saving ...." />
               ) : (
-                <button
-                  type="submit"
-                  className="btn btn-success w-sm"
-                  onClick={(e: any) => handleSubmit(e)}
-                  onSubmit={(e: any) => handleSubmit(e)}
-                >
-                  Submit
-                </button>
+                <>
+                  {status == "COMPLETED" ? null : (
+                    <button
+                      type="submit"
+                      className="btn btn-success w-sm"
+                      onClick={(e: any) => handleSubmit(e)}
+                      onSubmit={(e: any) => handleSubmit(e)}
+                    >
+                      Submit
+                    </button>
+                  )}
+                </>
               )}
               &nbsp;
               <Link
@@ -1032,6 +1294,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     COGS Account
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={cogsAcount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "cogs_account")
@@ -1047,6 +1310,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     Asset Account
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={assetAcount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "asset_account")
@@ -1062,6 +1326,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     Income Account
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={incomeAcount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "income_account")
@@ -1077,6 +1342,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     Gain/Loss Account
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={gainAcount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "gain_account")
@@ -1092,6 +1358,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     Price Variance Account
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={priceVarianAccount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "price_variant_account")
@@ -1107,6 +1374,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     Quantity Variance Account
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={qtyVarianAcount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "qty_variant_account")
@@ -1122,6 +1390,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     Exchange Rate Variance Account
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={exhangeAcount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "exchange_variant_account")
@@ -1137,6 +1406,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     WIP Cost Variance Account
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={wipAcount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "wip_variant_account")
@@ -1152,6 +1422,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     Scrap Account
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={scrapAcount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "scrap_account")
@@ -1167,6 +1438,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     WIP Account
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={wpAcount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "wp_account")
@@ -1182,6 +1454,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     Unbuild Variance Account
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={unbuildAcount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "unbuild_account")
@@ -1197,6 +1470,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                     Adjustment Account CO Product
                   </label>
                   <Select
+                    isDisabled={true}
                     defaultValue={adjustAcount}
                     onChange={(e: any) =>
                       handleSelectionChange(e, "adjust_account")

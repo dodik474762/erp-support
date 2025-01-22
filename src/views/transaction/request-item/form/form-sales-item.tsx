@@ -43,7 +43,7 @@ const FormSalesItem = (props: any) => {
                           return (
                             <tr key={index}>
                               <td>{item.type && item.type.label}</td>
-                              <td>{item.price}</td>
+                              <td>{item.price && item.price.toLocaleString("id-ID")}</td>
                               <td className="text-center">
                                 {
                                   readonOnly == false ? <Link
