@@ -5,35 +5,20 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Flatpickr from "react-flatpickr";
 import { useRouter } from "next/router";
-import GridSearch from "@/components/List/Grid/grid-search";
+import { useSession } from "next-auth/react";
+import { checkPermission } from "@/utility/permission";
+import moment from "moment";
+import GridList from "@/components/List/Grid";
 import { RowSelection } from "gridjs-selection";
 import { handleRouting } from "@/utility/routing-helper";
 import { handleDeleteData } from "@/services/services";
+import { handleDelete } from "@/utility/helper";
+import GridSearch from "@/components/List/Grid/grid-search";
 
-const RequestItemViews = ({ base_url = "", akses = "" }) => {
+const MasterCustomerCategoryViews = ({ base_url = "", akses = "" }) => {
   const router = useRouter();
-  const [filterKeyword, setFilterKeyword] = useState("");
-  const [filterDate, setFilterDate] = useState("");
   const [refresh, setRefresh] = useState(false);
-  const filterData = {
-    keyword: "",
-    date: "",
-  };
-  let dataChecked: number[] = [];
-
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    name: string
-  ) => {
-    if (name === "filterKeyword") {
-      filterData.keyword = event.target.value;
-      filterData.date = filterDate;
-    }
-    if (name === "filterDate") {
-      filterData.date = event.target.value;
-      filterData.keyword = filterKeyword;
-    }
-  };
+  let dataChecked: any = [];
 
   const handleCheck = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -66,50 +51,16 @@ const RequestItemViews = ({ base_url = "", akses = "" }) => {
     });
   };
 
-  const handleDelete = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (dataChecked.length > 0) {
-      Message.question("Apa anda yakin menghapus data ini?", () => {
-        const authToken = localStorage.getItem("authToken");
-        const req = fetch(process.env.API_BASE_URL + base_url + "/deleteAll", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-          },
-          body: JSON.stringify({
-            id: dataChecked,
-          }),
-        }).then((res) => {
-          router.push(base_url);
-        });
-      });
-    } else {
-      Message.error("Please select data to delete");
-    }
-  };
-
-  const handleFilter = (e: any) => {
-    e.preventDefault();
-    setFilterKeyword(
-      filterData.keyword == "" ? filterKeyword : filterData.keyword
-    );
-    setFilterDate(filterData.date == "" ? filterDate : filterData.date);
-  };
-
-  useEffect(() => {
-    if (!router.isReady) return;
-  }, [router.isReady]);
-
   return (
     <>
-      <PageTitle titlePage={"Transaction"} subTitle="Request Item" />
+      <PageTitle titlePage={"Master"} subTitle="Customer Category" />
 
       <div className="row">
         <div className="col-lg-12">
           <div className="card" id="tasksList">
             <div className="card-header border-0">
               <div className="d-flex align-items-center">
-                <h5 className="card-title mb-0 flex-grow-1">Request Item List</h5>
+                <h5 className="card-title mb-0 flex-grow-1">Customer Category List</h5>
                 <div className="flex-shrink-0">
                   {akses.includes("create") ? (
                     <Link
@@ -125,7 +76,28 @@ const RequestItemViews = ({ base_url = "", akses = "" }) => {
                     <button
                       className="btn btn-soft-danger"
                       style={{ marginLeft: "6px" }}
-                      onClick={(e: any) => handleDelete(e)}
+                      onClick={(e: any) =>
+                        handleDelete(
+                          e,
+                          base_url,
+                          dataChecked,
+                          (result: any) => {
+                            if (
+                              result.statusCode == 200 ||
+                              result.statusCode == 201
+                            ) {
+                              if (result.is_valid == true) {
+                                Message.success("Data Berhasil Diproses");
+                                setRefresh(true);
+                              } else {
+                                Message.error(result.message);
+                              }
+                            } else {
+                              Message.error(result.message);
+                            }
+                          }
+                        )
+                      }
                     >
                       <i className="ri-delete-bin-2-line"></i>
                     </button>
@@ -133,7 +105,7 @@ const RequestItemViews = ({ base_url = "", akses = "" }) => {
                 </div>
               </div>
             </div>
-            
+
             <GridSearch
               base_url={base_url}
               akses={akses}
@@ -177,24 +149,12 @@ const RequestItemViews = ({ base_url = "", akses = "" }) => {
                   },
                 },
                 {
-                  id: "item_name",
-                  name: "NAME",
+                  id: "type",
+                  name: "TYPE",
                 },
                 {
-                  id: "code",
-                  name: "CODE",
-                },
-                {
-                  id: "item_erp_id",
-                  name: "ERP ID",
-                },
-                {
-                  id: "item_erp_name",
-                  name: "ERP NAME",
-                },                
-                {
-                  id: "status",
-                  name: "STATUS",
+                  id: "remarks",
+                  name: "REMARKS",
                 },
                 {
                   name: "Actions",
@@ -299,8 +259,7 @@ const RequestItemViews = ({ base_url = "", akses = "" }) => {
                   },
                 },
               ]}
-              value={["id", "item_name", "code", "item_erp_id","item_erp_name","status"]}
-              limit={25}
+              value={["id", "type", "remarks"]}
             />
           </div>
         </div>
@@ -309,4 +268,4 @@ const RequestItemViews = ({ base_url = "", akses = "" }) => {
   );
 };
 
-export default RequestItemViews;
+export default MasterCustomerCategoryViews;

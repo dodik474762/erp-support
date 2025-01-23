@@ -12,6 +12,7 @@ import moment from "moment-timezone";
 import { useSession } from "next-auth/react";
 import FormSalesItem from "./form-sales-item";
 import FormModalSalesItems from "./modal/form-modal-sales-item";
+import CircleLoading from "@/components/layouts/Loading/circle-loading";
 
 const FormRequestItemViews = ({ base_url = "" }) => {
   const router = useRouter();
@@ -84,6 +85,9 @@ const FormRequestItemViews = ({ base_url = "" }) => {
   const [adjustAccounts, setAdjustAccounts]: any = useState([]);
   const [adjustAcount, setAdjustAcount]: any = useState(null);
   const [status, setStatus]: any = useState(``);
+  const [erpId, setErpId] = useState(``);
+  const [erpCode, setErpCode] = useState(``);
+  const [erpName, setErpName] = useState(``);
   const dataSalesItemLines = useRef([]) as any;
 
   const postData: any = {
@@ -119,13 +123,20 @@ const FormRequestItemViews = ({ base_url = "" }) => {
     wpAcount: wpAcount,
     unbuildAcount: unbuildAcount,
     adjustAcount: adjustAcount,
+    erpId: erpId,
+    erpCode: erpCode,
+    erpName: erpName,
     sales_items: dataSalesItemLines.current,
+    status: status,
   };
 
   const fetchData = async () => {
     setLoading(true);
     const req: any = await ApiServices.getDataById(String(id), base_url);
     if (req.is_valid == true) {
+      setErpId(req.data.item_erp_id);
+      setErpCode(req.data.item_erp_code);
+      setErpName(req.data.item_erp_name);
       setRemarks(req.data.remarks);
       setName(req.data.item_name);
       setDepartment({
@@ -184,73 +195,73 @@ const FormRequestItemViews = ({ base_url = "" }) => {
         value: req.data.tax_schedule,
         label: req.data.tax_schedule_name,
       });
-      if(req.data.account){
+      if (req.data.account) {
         setCogsAcount({
           value: req.data.account,
           label: req.data.account_name,
         });
       }
-      if(req.data.asset_account){
+      if (req.data.asset_account) {
         setAssetAcount({
           value: req.data.asset_account,
           label: req.data.asset_account_name,
         });
       }
-      if(req.data.income_account){
+      if (req.data.income_account) {
         setIncomeAcount({
           value: req.data.income_account,
           label: req.data.income_account_name,
         });
       }
-      if(req.data.gain_account){
+      if (req.data.gain_account) {
         setGainAcount({
           value: req.data.gain_account,
           label: req.data.gain_account_name,
         });
       }
-      if(req.data.price_account){
+      if (req.data.price_account) {
         setPriceVarianAccount({
           value: req.data.price_account,
           label: req.data.price_account_name,
         });
       }
-      if(req.data.qty_account){
+      if (req.data.qty_account) {
         setQtyVarianAcount({
           value: req.data.qty_account,
           label: req.data.qty_account_name,
         });
       }
-      if(req.data.rate_account){
+      if (req.data.rate_account) {
         setExchangeAcount({
           value: req.data.rate_account,
           label: req.data.rate_account_name,
         });
       }
-      if(req.data.wip_account){
+      if (req.data.wip_account) {
         setWipAcount({
           value: req.data.wip_account,
           label: req.data.wip_account_name,
         });
       }
-      if(req.data.scrap_account){
+      if (req.data.scrap_account) {
         setScrapAcount({
           value: req.data.scrap_account,
           label: req.data.scrap_account_name,
         });
       }
-      if(req.data.wip_cost_account){
+      if (req.data.wip_cost_account) {
         setWpAcount({
           value: req.data.wip_cost_account,
           label: req.data.wip_cost_account_name,
         });
       }
-      if(req.data.unbuild_account){
+      if (req.data.unbuild_account) {
         setUnbuildAcount({
           value: req.data.unbuild_account,
           label: req.data.unbuild_account_name,
         });
       }
-      if(req.data.adjust_account){
+      if (req.data.adjust_account) {
         setAdjustAcount({
           value: req.data.adjust_account,
           label: req.data.adjust_account_name,
@@ -784,12 +795,12 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       return false;
     }
 
-    if (data.incubationDay == "") {
+    if (data.incubationDay == null) {
       setErrors({ message: "Incubation Days Harus Diisi" });
       return false;
     }
 
-    if (data.purchasePrice == "") {
+    if (data.purchasePrice == null) {
       setErrors({ message: "Purchase Price Harus Diisi" });
       return false;
     }
@@ -850,6 +861,20 @@ const FormRequestItemViews = ({ base_url = "" }) => {
       return false;
     }
 
+    if (data.status == "COMPLETED") {
+      if (data.erpId == "") {
+        setErrors({ message: "ERP ID Harus Diisi" });
+        return false;
+      }
+      if (data.erpCode == "") {
+        setErrors({ message: "ERP Code Harus Diisi" });
+        return false;
+      }
+      if (data.erpName == "") {
+        setErrors({ message: "ERP Name Harus Diisi" });
+        return false;
+      }
+    }
     setErrors(null);
     return true;
   };
@@ -906,6 +931,12 @@ const FormRequestItemViews = ({ base_url = "" }) => {
           <br />
         </>
       )}
+
+      <div className="row">
+        <div className="col-md-12 text-center">
+          {loading == true ? <CircleLoading /> : null}
+        </div>
+      </div>
 
       <form
         id="createproduct-form"
@@ -1258,15 +1289,28 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                 <ButtonLoading message="Loading Proses Saving ...." />
               ) : (
                 <>
-                  {status == "COMPLETED" ? null : (
+                  {status == "COMPLETED" && erpId == "" ? (
                     <button
                       type="submit"
                       className="btn btn-success w-sm"
                       onClick={(e: any) => handleSubmit(e)}
                       onSubmit={(e: any) => handleSubmit(e)}
                     >
-                      Submit
+                      Update ERP ID
                     </button>
+                  ) : (
+                    <>
+                      {status == "COMPLETED" ? null : (
+                        <button
+                          type="submit"
+                          className="btn btn-success w-sm"
+                          onClick={(e: any) => handleSubmit(e)}
+                          onSubmit={(e: any) => handleSubmit(e)}
+                        >
+                          Submit
+                        </button>
+                      )}
+                    </>
                   )}
                 </>
               )}
@@ -1480,6 +1524,64 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                 </div>
               </div>
             </div>
+
+            {status == "COMPLETED" ? (
+              <div className="card">
+                <div className="card-header">
+                  <h5 className="card-title mb-0">ERP Data</h5>
+                </div>
+                <div className="card-body">
+                  <div className="mb-3">
+                    <label className="form-label" htmlFor="product-title-input">
+                      Item ERP Id
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="product-title-input"
+                      placeholder="Enter item erp id"
+                      value={erpId}
+                      onInput={(e: any) => setErpId(e.target.value)}
+                    />
+                    <div className="invalid-feedback">
+                      Please Enter a item erp id
+                    </div>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label" htmlFor="product-title-input">
+                      Item ERP Code
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="product-title-input"
+                      placeholder="Enter item erp code"
+                      value={erpCode}
+                      onInput={(e: any) => setErpCode(e.target.value)}
+                    />
+                    <div className="invalid-feedback">
+                      Please Enter a item erp code
+                    </div>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label" htmlFor="product-title-input">
+                      Item ERP Name
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="product-title-input"
+                      placeholder="Enter item erp name"
+                      value={erpName}
+                      onInput={(e: any) => setErpName(e.target.value)}
+                    />
+                    <div className="invalid-feedback">
+                      Please Enter a item erp name
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </form>

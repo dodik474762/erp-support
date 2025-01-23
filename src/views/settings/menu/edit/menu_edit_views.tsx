@@ -30,6 +30,7 @@ const MenuEditViews = ({
     path: path,
     icon: icon,
     parent: parent,
+    routing: routing,
   };
 
   const fetchData = async () => {

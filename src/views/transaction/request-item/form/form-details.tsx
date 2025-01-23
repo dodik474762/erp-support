@@ -5,14 +5,17 @@ import Link from "next/link";
 import ApiServices from "@/services/api.services";
 import InfoApproval from "./info-approval";
 import FormSalesItem from "./form-sales-item";
+import CircleLoading from "@/components/layouts/Loading/circle-loading";
 
 const RequestItemDetailsViews = ({ base_url = "" }) => {
   const router = useRouter();
   const id = router.query.id;
   const [data, setData]: any = useState({});
   const [salesItems, setSalesItems]: any = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
+    setLoading(true);
     const req: any = await ApiServices.getDataById(String(id), base_url);
     if (req.is_valid == true) {
       setData(req.data);
@@ -33,6 +36,7 @@ const RequestItemDetailsViews = ({ base_url = "" }) => {
       }
       setSalesItems(resultSalesItem);
     }
+    setLoading(false);
   };
   useEffect(() => {
     if (!router.isReady) return;
@@ -47,6 +51,12 @@ const RequestItemDetailsViews = ({ base_url = "" }) => {
         subTitle={"Request Item Detail ID :" + id}
       />
       <InfoApproval data={data} />
+
+      <div className="row">
+        <div className="col-md-12 text-center">
+          {loading == true ? <CircleLoading /> : null}
+        </div>
+      </div>
 
       <form
         id="createproduct-form"
@@ -550,10 +560,67 @@ const RequestItemDetailsViews = ({ base_url = "" }) => {
               <FormSalesItem items={salesItems} readonOnly={true} />
             </div>
           </div>
+          <div className="col-lg-4">
+            <div className="card">
+              <div className="card-header">
+                <h5 className="card-title mb-0">ERP Data</h5>
+              </div>
+              <div className="card-body">
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="product-title-input">
+                    Item ERP Id
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="product-title-input"
+                    placeholder="Enter item erp id"
+                    value={data.item_erp_id}
+                    disabled
+                  />
+                  <div className="invalid-feedback">
+                    Please Enter a item erp id
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="product-title-input">
+                    Item ERP Code
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="product-title-input"
+                    placeholder="Enter item erp code"
+                    value={data.item_erp_code}
+                    disabled
+                  />
+                  <div className="invalid-feedback">
+                    Please Enter a item erp code
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="product-title-input">
+                    Item ERP Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="product-title-input"
+                    placeholder="Enter item erp name"
+                    value={data.item_erp_name}
+                    disabled
+                  />
+                  <div className="invalid-feedback">
+                    Please Enter a item erp name
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="row">
-          <div className="col-lg-8">
+          <div className="col-lg-12">
             <div className="text-end mb-3">
               <Link
                 href={base_url}
