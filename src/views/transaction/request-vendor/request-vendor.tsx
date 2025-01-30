@@ -10,7 +10,7 @@ import { RowSelection } from "gridjs-selection";
 import { handleRouting } from "@/utility/routing-helper";
 import { handleDeleteData } from "@/services/services";
 
-const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
+const RequestVendorViews = ({ base_url = "", akses = "" }) => {
   const router = useRouter();
   const [filterKeyword, setFilterKeyword] = useState("");
   const [filterDate, setFilterDate] = useState("");
@@ -102,14 +102,14 @@ const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
 
   return (
     <>
-      <PageTitle titlePage={"Transaction"} subTitle="Request Customer" />
+      <PageTitle titlePage={"Transaction"} subTitle="Request Vendor" />
 
       <div className="row">
         <div className="col-lg-12">
           <div className="card" id="tasksList">
             <div className="card-header border-0">
               <div className="d-flex align-items-center">
-                <h5 className="card-title mb-0 flex-grow-1">Request Customer List</h5>
+                <h5 className="card-title mb-0 flex-grow-1">Request Vendor List</h5>
                 <div className="flex-shrink-0">
                   {akses.includes("create") ? (
                     <Link
@@ -177,7 +177,7 @@ const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
                   },
                 },
                 {
-                  id: "customer_name",
+                  id: "vendor_name",
                   name: "NAME",
                 },
                 {
@@ -185,11 +185,11 @@ const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
                   name: "CODE",
                 },
                 {
-                  id: "customer_erp_id",
+                  id: "vendor_erp_id",
                   name: "ERP ID",
                 },
                 {
-                  id: "customer_erp_name",
+                  id: "vendor_erp_name",
                   name: "ERP NAME",
                 },                
                 {
@@ -299,7 +299,7 @@ const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
                   },
                 },
               ]}
-              value={["id", "customer_name", "code", "customer_erp_id","customer_erp_name","status"]}
+              value={["id", "vendor_name", "code", "vendor_erp_id","vendor_erp_name","status"]}
               limit={25}
             />
           </div>
@@ -309,4 +309,4 @@ const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
   );
 };
 
-export default RequestCustomerViews;
+export default RequestVendorViews;

@@ -88,6 +88,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
   const [erpId, setErpId] = useState(``);
   const [erpCode, setErpCode] = useState(``);
   const [erpName, setErpName] = useState(``);
+  const [notSetErpId, setNotSetErpId] = useState(false);
   const dataSalesItemLines = useRef([]) as any;
 
   const postData: any = {
@@ -135,6 +136,9 @@ const FormRequestItemViews = ({ base_url = "" }) => {
     const req: any = await ApiServices.getDataById(String(id), base_url);
     if (req.is_valid == true) {
       setErpId(req.data.item_erp_id);
+      if(req.data.item_erp_id != "") {
+        setNotSetErpId(true);
+      }
       setErpCode(req.data.item_erp_code);
       setErpName(req.data.item_erp_name);
       setRemarks(req.data.remarks);
@@ -1289,7 +1293,7 @@ const FormRequestItemViews = ({ base_url = "" }) => {
                 <ButtonLoading message="Loading Proses Saving ...." />
               ) : (
                 <>
-                  {status == "COMPLETED" && erpId == "" ? (
+                  {status == "COMPLETED" && notSetErpId == false ? (
                     <button
                       type="submit"
                       className="btn btn-success w-sm"

@@ -12,7 +12,7 @@ import moment from "moment-timezone";
 import { useSession } from "next-auth/react";
 import CircleLoading from "@/components/layouts/Loading/circle-loading";
 
-const FormRequestCustomerViews = ({ base_url = "" }) => {
+const FormRequestVendorViews = ({ base_url = "" }) => {
   const router = useRouter();
   const id = router.query.id ?? "";
   const session: any = useSession();
@@ -48,22 +48,6 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
   const [picName, setPicName] = useState(``);
   const [picContact, setPicContact] = useState(``);
   const [picTitle, setPicTitle] = useState(``);
-  const [datePermitStartDate, setDatePermitStartDate]: any = useState(null);
-  const [datePermitEndDate, setDatePermitEndDate]: any = useState(null);
-  const [dateCertificateCdobStartDate, setDateCertificateCdobStartDate]: any =
-    useState(null);
-  const [dateCertificateCdobEndDate, setDateCertificateCdobEndDate]: any =
-    useState(null);
-  const [dateApotekerStartDate, setDateApotekerStartDate]: any = useState(null);
-  const [dateApotekerEndDate, setDateApotekerEndDate]: any = useState(null);
-  const [dateCertificateCdakbStartDate, setDateCertificateCdakbStartDate]: any =
-    useState(null);
-  const [dateCertificateCdakbEndDate, setDateCertificateCdakbEndDate]: any =
-    useState(null);
-  const [permitNumber, setPermitNumber]: any = useState(null);
-  const [cdobNumber, setCdobNumber]: any = useState(null);
-  const [apotekerNumber, setApotekerNumber]: any = useState(null);
-  const [cdakbNumber, setCdakbNumber]: any = useState(null);
   const [erpId, setErpId] = useState(``);
   const [erpCode, setErpCode] = useState(``);
   const [erpName, setErpName] = useState(``);
@@ -73,7 +57,7 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
     id: id,
     subsidiary: subsidiary,
     category: category,
-    customer_name: name,
+    vendor_name: name,
     remarks: remarks,
     address: address,
     email: email,
@@ -82,18 +66,6 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
     picName: picName,
     picContact: picContact,
     picTitle: picTitle,
-    datePermitStartDate: datePermitStartDate,
-    datePermitEndDate: datePermitEndDate,
-    dateCertificateCdobStartDate: dateCertificateCdobStartDate,
-    dateCertificateCdobEndDate: dateCertificateCdobEndDate,
-    dateApotekerStartDate: dateApotekerStartDate,
-    dateApotekerEndDate: dateApotekerEndDate,
-    dateCertificateCdakbStartDate: dateCertificateCdakbStartDate,
-    dateCertificateCdakbEndDate: dateCertificateCdakbEndDate,
-    permitNumber: permitNumber,
-    cdobNumber: cdobNumber,
-    apotekerNumber: apotekerNumber,
-    cdakbNumber: cdakbNumber,
     erpId: erpId,
     erpCode: erpCode,
     erpName: erpName,
@@ -104,48 +76,32 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
     setLoading(true);
     const req: any = await ApiServices.getDataById(String(id), base_url);
     if (req.is_valid == true) {
-      setErpId(req.data.customer_erp_id);
-      if(req.data.customer_erp_id != "") {
+      setErpId(req.data.vendor_erp_id);
+      if(req.data.vendor_erp_id != "") {
         setNotSetErpId(true);
       }
-      setErpCode(req.data.customer_erp_code);
-      setErpName(req.data.customer_erp_name);
+      setErpCode(req.data.vendor_erp_code);
+      setErpName(req.data.vendor_erp_name);
       setRemarks(req.data.remarks);
       setAddress(req.data.address);
       setEmail(req.data.email);
       setPhone(req.data.phone);
-      setName(req.data.customer_name);
+      setName(req.data.vendor_name);
       setSubsidiary({
         value: req.data.subsidiary,
         label: req.data.subsidiary_type,
       });
       setCategory({
-        value: req.data.customer_category,
-        label: req.data.customer_category_name,
+        value: req.data.vendor_category,
+        label: req.data.vendor_category_name,
       });
       setType({
-        value: req.data.customer_type,
-        label: req.data.customer_type,
+        value: req.data.vendor_type,
+        label: req.data.vendor_type,
       });
       setPicName(req.data.pic_name);
       setPicContact(req.data.pic_contact);
-      setPicTitle(req.data.pic_title);
-      setDatePermitStartDate(req.data.date_permit_valid_start_date);
-      setDatePermitEndDate(req.data.date_permit_valid_end_date);
-      setDateCertificateCdobStartDate(
-        req.data.date_certificate_cdob_start_date
-      );
-      setDateCertificateCdobEndDate(req.data.date_certificate_cdob_end_date);
-      setDateApotekerStartDate(req.data.date_permit_apoteker_start_date);
-      setDateApotekerEndDate(req.data.date_permit_apoteker_end_date);
-      setDateCertificateCdakbStartDate(
-        req.data.date_certificate_cdakb_start_date
-      );
-      setDateCertificateCdakbEndDate(req.data.date_certificate_cdakb_end_date);
-      setPermitNumber(req.data.permit_number);
-      setCdobNumber(req.data.cdob_number);
-      setApotekerNumber(req.data.apoteker_number);
-      setCdakbNumber(req.data.cdakb_number);
+      setPicTitle(req.data.pic_title);     
       setStatus(req.data.status);
     }
     setLoading(false);
@@ -177,7 +133,7 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
   const fetchDataCategory = async () => {
     const authToken = localStorage.getItem("authToken");
     const req = await fetch(
-      process.env.API_BASE_URL + "/master/customer-category/getAll",
+      process.env.API_BASE_URL + "/master/vendor-category/getAll",
       {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -287,7 +243,7 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
 
   return (
     <>
-      <PageTitle titlePage="Form Request" subTitle="Request Customer Add" />
+      <PageTitle titlePage="Form Request" subTitle="Request Vendor Add" />
 
       {errors == null ? null : (
         <>
@@ -314,7 +270,7 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
           <div className="col-lg-8">
             <div className="card">
               <div className="card-header">
-                <h5 className="card-title mb-0">Customer</h5>
+                <h5 className="card-title mb-0">Vendor</h5>
               </div>
               <div className="card-body">
                 <div className="mb-3">
@@ -351,7 +307,7 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
                     htmlFor="choices-publish-status-input"
                     className="form-label"
                   >
-                    Customer Category
+                    Vendor Category
                   </label>
                   <Select
                     defaultValue={category}
@@ -406,7 +362,7 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
                     htmlFor="choices-publish-status-input"
                     className="form-label"
                   >
-                    Customer Type
+                    Vendor Type
                   </label>
                   <Select
                     defaultValue={type}
@@ -461,200 +417,6 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
                   <div className="invalid-feedback">
                     Please Enter a pic title
                   </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Masa Berlaku Perizinan Start Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter start date"
-                    value={datePermitStartDate}
-                    onInput={(e: any) => setDatePermitStartDate(e.target.value)}
-                  />
-                  <div className="invalid-feedback">
-                    Please Enter a start date
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Masa Berlaku Perizinan End Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter end date"
-                    value={datePermitEndDate}
-                    onInput={(e: any) => setDatePermitEndDate(e.target.value)}
-                  />
-                  <div className="invalid-feedback">
-                    Please Enter a end date
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Certificate CDOB Start Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter start date"
-                    value={dateCertificateCdobStartDate}
-                    onInput={(e: any) =>
-                      setDateCertificateCdobStartDate(e.target.value)
-                    }
-                  />
-                  <div className="invalid-feedback">
-                    Please Enter a start date
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Certificate CDOB End Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter end date"
-                    value={dateCertificateCdobEndDate}
-                    onInput={(e: any) =>
-                      setDateCertificateCdobEndDate(e.target.value)
-                    }
-                  />
-                  <div className="invalid-feedback">
-                    Please Enter a end date
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Apoteker Penanggung Jawab Start Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter start date"
-                    value={dateApotekerStartDate}
-                    onInput={(e: any) =>
-                      setDateApotekerStartDate(e.target.value)
-                    }
-                  />
-                  <div className="invalid-feedback">
-                    Please Enter a start date
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Apoteker Penanggung Jawab End Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter end date"
-                    value={dateApotekerEndDate}
-                    onInput={(e: any) => setDateApotekerEndDate(e.target.value)}
-                  />
-                  <div className="invalid-feedback">
-                    Please Enter a end date
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Ceritificate CDAKB Start Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter start date"
-                    value={dateCertificateCdakbStartDate}
-                    onInput={(e: any) =>
-                      setDateCertificateCdakbStartDate(e.target.value)
-                    }
-                  />
-                  <div className="invalid-feedback">
-                    Please Enter a start date
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Ceritificate CDAKB End Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter end date"
-                    value={dateCertificateCdakbEndDate}
-                    onInput={(e: any) =>
-                      setDateCertificateCdakbEndDate(e.target.value)
-                    }
-                  />
-                  <div className="invalid-feedback">
-                    Please Enter a end date
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Nomor Perizinan
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter nomor"
-                    value={permitNumber}
-                    onInput={(e: any) => setPermitNumber(e.target.value)}
-                  />
-                  <div className="invalid-feedback">Please Enter a nomor</div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Nomor CDOB
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter nomor"
-                    value={cdobNumber}
-                    onInput={(e: any) => setCdobNumber(e.target.value)}
-                  />
-                  <div className="invalid-feedback">Please Enter a nomor</div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Nomor Apoteker
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter nomor"
-                    value={apotekerNumber}
-                    onInput={(e: any) => setApotekerNumber(e.target.value)}
-                  />
-                  <div className="invalid-feedback">Please Enter a nomor</div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="product-title-input">
-                    Nomor CDAKB
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="product-title-input"
-                    placeholder="Enter nomor"
-                    value={cdakbNumber}
-                    onInput={(e: any) => setCdakbNumber(e.target.value)}
-                  />
-                  <div className="invalid-feedback">Please Enter a nomor</div>
                 </div>
                 <div className="mb-3">
                   <label className="form-label" htmlFor="product-title-input">
@@ -724,50 +486,50 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
                 <div className="card-body">
                   <div className="mb-3">
                     <label className="form-label" htmlFor="product-title-input">
-                      Customer ERP Id
+                      Vendor ERP Id
                     </label>
                     <input
                       type="text"
                       className="form-control"
                       id="product-title-input"
-                      placeholder="Enter customer erp id"
+                      placeholder="Enter erp id"
                       value={erpId}
                       onInput={(e: any) => setErpId(e.target.value)}
                     />
                     <div className="invalid-feedback">
-                      Please Enter a customer erp id
+                      Please Enter a erp id
                     </div>
                   </div>
                   <div className="mb-3">
                     <label className="form-label" htmlFor="product-title-input">
-                      Customer ERP Code
+                      Vendor ERP Code
                     </label>
                     <input
                       type="text"
                       className="form-control"
                       id="product-title-input"
-                      placeholder="Enter customer erp code"
+                      placeholder="Enter erp code"
                       value={erpCode}
                       onInput={(e: any) => setErpCode(e.target.value)}
                     />
                     <div className="invalid-feedback">
-                      Please Enter a customer erp code
+                      Please Enter a erp code
                     </div>
                   </div>
                   <div className="mb-3">
                     <label className="form-label" htmlFor="product-title-input">
-                      Customer ERP Name
+                      Vendor ERP Name
                     </label>
                     <input
                       type="text"
                       className="form-control"
                       id="product-title-input"
-                      placeholder="Enter item customer name"
+                      placeholder="Enter erp name"
                       value={erpName}
                       onInput={(e: any) => setErpName(e.target.value)}
                     />
                     <div className="invalid-feedback">
-                      Please Enter a item customer name
+                      Please Enter a erp name
                     </div>
                   </div>
                 </div>
@@ -780,4 +542,4 @@ const FormRequestCustomerViews = ({ base_url = "" }) => {
   );
 };
 
-export default FormRequestCustomerViews;
+export default FormRequestVendorViews;

@@ -10,7 +10,7 @@ import { RowSelection } from "gridjs-selection";
 import { handleRouting } from "@/utility/routing-helper";
 import { handleDeleteData } from "@/services/services";
 
-const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
+const ApprovalVendorViews = ({ base_url = "", akses = "" }) => {
   const router = useRouter();
   const [filterKeyword, setFilterKeyword] = useState("");
   const [filterDate, setFilterDate] = useState("");
@@ -20,20 +20,6 @@ const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
     date: "",
   };
   let dataChecked: number[] = [];
-
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    name: string
-  ) => {
-    if (name === "filterKeyword") {
-      filterData.keyword = event.target.value;
-      filterData.date = filterDate;
-    }
-    if (name === "filterDate") {
-      filterData.date = event.target.value;
-      filterData.keyword = filterKeyword;
-    }
-  };
 
   const handleCheck = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -102,34 +88,15 @@ const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
 
   return (
     <>
-      <PageTitle titlePage={"Transaction"} subTitle="Request Customer" />
+      <PageTitle titlePage={"Approval"} subTitle="Request Vendor" />
 
       <div className="row">
         <div className="col-lg-12">
           <div className="card" id="tasksList">
             <div className="card-header border-0">
               <div className="d-flex align-items-center">
-                <h5 className="card-title mb-0 flex-grow-1">Request Customer List</h5>
+                <h5 className="card-title mb-0 flex-grow-1">Request Vendor List</h5>
                 <div className="flex-shrink-0">
-                  {akses.includes("create") ? (
-                    <Link
-                      href={base_url + "/add"}
-                      className="btn btn-success add-btn"
-                      id="create-btn"
-                    >
-                      <i className="ri-add-line align-bottom me-1"></i> Create
-                    </Link>
-                  ) : null}
-
-                  {akses.includes("delete") ? (
-                    <button
-                      className="btn btn-soft-danger"
-                      style={{ marginLeft: "6px" }}
-                      onClick={(e: any) => handleDelete(e)}
-                    >
-                      <i className="ri-delete-bin-2-line"></i>
-                    </button>
-                  ) : null}
                 </div>
               </div>
             </div>
@@ -177,21 +144,13 @@ const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
                   },
                 },
                 {
-                  id: "customer_name",
+                  id: "vendor_name",
                   name: "NAME",
                 },
                 {
-                  id: "code",
-                  name: "CODE",
+                  id: "remarks",
+                  name: "REMARKS",
                 },
-                {
-                  id: "customer_erp_id",
-                  name: "ERP ID",
-                },
-                {
-                  id: "customer_erp_name",
-                  name: "ERP NAME",
-                },                
                 {
                   id: "status",
                   name: "STATUS",
@@ -226,80 +185,13 @@ const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
                               <i className="ri-eye-fill fs-16"></i>
                             </Link>
                           </li>
-                          {akses.includes("update") ? (
-                            <li
-                              className="list-inline-item edit"
-                              data-bs-toggle="tooltip"
-                              data-bs-trigger="hover"
-                              data-bs-placement="top"
-                              title=""
-                              data-bs-original-title="Edit"
-                            >
-                              <Link
-                                href={
-                                  base_url + "/edit?id=" + row.cells[0].data
-                                }
-                                className="text-primary d-inline-block edit-item-btn"
-                                onClick={(e) =>
-                                  handleRouting(
-                                    e,
-                                    base_url + "/edit?id=" + row.cells[0].data,
-                                    router
-                                  )
-                                }
-                              >
-                                <i className="ri-pencil-fill fs-16"></i>
-                              </Link>
-                            </li>
-                          ) : null}
-                          {akses.includes("delete") ? (
-                            <li
-                              className="list-inline-item"
-                              data-bs-toggle="tooltip"
-                              data-bs-trigger="hover"
-                              data-bs-placement="top"
-                              title=""
-                              data-bs-original-title="Remove"
-                            >
-                              <Link
-                                className="text-danger d-inline-block remove-item-btn"
-                                href={base_url + "/delete/" + row.cells[0].data}
-                                onClick={(e: any) =>
-                                  handleDeleteData(
-                                    e,
-                                    base_url,
-                                    row.cells[0].data,
-                                    (result: any) => {
-                                      if (
-                                        result.statusCode == 200 ||
-                                        result.statusCode == 201
-                                      ) {
-                                        if (result.is_valid == true) {
-                                          Message.success(
-                                            "Data Berhasil Diproses"
-                                          );
-                                          setRefresh(true);
-                                        } else {
-                                          Message.error(result.message);
-                                        }
-                                      } else {
-                                        Message.error(result.message);
-                                      }
-                                    }
-                                  )
-                                }
-                              >
-                                <i className="ri-delete-bin-5-fill fs-16"></i>
-                              </Link>
-                            </li>
-                          ) : null}
                         </ul>
                       </>
                     );
                   },
                 },
               ]}
-              value={["id", "customer_name", "code", "customer_erp_id","customer_erp_name","status"]}
+              value={["id", "vendor_name", "remarks", "status"]}
               limit={25}
             />
           </div>
@@ -309,4 +201,4 @@ const RequestCustomerViews = ({ base_url = "", akses = "" }) => {
   );
 };
 
-export default RequestCustomerViews;
+export default ApprovalVendorViews;
